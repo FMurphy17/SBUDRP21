@@ -20,6 +20,7 @@ LaTeX.
 * Get up to speed on doing deep learning 
 
 # Random Change
+* change
 # Links
 
 * [Towards Data Science on Python OCR from scratch](https://towardsdatascience.com/create-simple-optical-character-recognition-ocr-with-python-6d90adb82bb8)
