@@ -19,9 +19,17 @@ LaTeX.
 * Maybe if there's time, do an interactive demo
 * Get up to speed on doing deep learning 
 
-# Random Change
-* change
+# Datasets
+* https://www.kaggle.com/xainano/handwrittenmathsymbols
+* https://www.kaggle.com/clarencezhao/handwritten-math-symbol-dataset
+
 # Links
 
 * [Towards Data Science on Python OCR from scratch](https://towardsdatascience.com/create-simple-optical-character-recognition-ocr-with-python-6d90adb82bb8)
+* [Towards Data Science - Image pre-processing](https://towardsdatascience.com/image-pre-processing-c1aec0be3edf)
 
+* Existing projects: 
+  * http://cs229.stanford.edu/proj2013/JimenezNguyen_MathFormulas_final_paper.pdf
+  * https://github.com/ThomasLech/CROHME_extractor
+  * https://github.com/MkdmOmar/Mathematical-Symbol-Recognition
+  * https://github.com/meghana-kantharaj/Handwritten-mathematical-symbol-recognition/blob/master/Mathematical_handwritten_symbol_recognition_report.doc
