@@ -27,9 +27,10 @@ LaTeX.
 
 * [Towards Data Science on Python OCR from scratch](https://towardsdatascience.com/create-simple-optical-character-recognition-ocr-with-python-6d90adb82bb8)
 * [Towards Data Science - Image pre-processing](https://towardsdatascience.com/image-pre-processing-c1aec0be3edf)
+* https://keras.io/examples/vision/captcha_ocr/
+* https://www.tensorflow.org/tutorials/keras/classification#set_up_the_layers
 
 * Existing projects: 
-  * http://cs229.stanford.edu/proj2013/JimenezNguyen_MathFormulas_final_paper.pdf
+  * https://github.com/tensorflow/tensorflow/blob/master/tensorflow/python/keras/engine/training.py
+  * https://github.com/Otman404/Mathematical_Symbols_Recognition/tree/master/Project
   * https://github.com/ThomasLech/CROHME_extractor
-  * https://github.com/MkdmOmar/Mathematical-Symbol-Recognition
-  * https://github.com/meghana-kantharaj/Handwritten-mathematical-symbol-recognition/blob/master/Mathematical_handwritten_symbol_recognition_report.doc
