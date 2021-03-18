@@ -32,6 +32,7 @@ class MathDigitModel(tf.keras.Model):
 
         # store layers in list so that we can add as many layers as we want
         self.dense = []
+        self.dense.append(tf.keras.layers.Flatten())
         for i in range(number_layers):
             self.dense.append(tf.keras.layers.Dense(neurons_per_layer, activation=tf.nn.relu))
         self.dense.append(tf.keras.layers.Dense(neurons_per_layer, activation=tf.nn.softmax))
