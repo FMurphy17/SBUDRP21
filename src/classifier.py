@@ -23,19 +23,19 @@ class MathDigitModel(tf.keras.Model):
         and the classifier will take too long to train
         """
         super(MathDigitModel, self).__init__()
-        self.layers = number_layers
-        self.neurons = neurons_per_layer
+        self.n_layers = number_layers
+        self.n_neurons = neurons_per_layer
 
         # need to have at least one layer
-        if self.layers < 1:
+        if self.n_layers < 1:
             raise Exception("number of layers must be > 1")
 
         # store layers in list so that we can add as many layers as we want
         self.dense = []
         self.dense.append(tf.keras.layers.Flatten())
-        for i in range(number_layers):
-            self.dense.append(tf.keras.layers.Dense(neurons_per_layer, activation=tf.nn.relu))
-        self.dense.append(tf.keras.layers.Dense(neurons_per_layer, activation=tf.nn.softmax))
+        for i in range(self.n_layers):
+            self.dense.append(tf.keras.layers.Dense(self.n_neurons, activation=tf.nn.relu))
+        self.dense.append(tf.keras.layers.Dense(self.n_neurons, activation=tf.nn.softmax))
         # reserves half the data for training
         self.dropout = tf.keras.layers.Dropout(0.5)
 
@@ -69,7 +69,7 @@ class MathDigitModel(tf.keras.Model):
         #putting output of first layer into subsequent layer and so on
         if training:
             output = self.dropout(output, training=training)
-        for i in range(1, self.layers):
+        for i in range(1, self.n_layers):
             output = self.dense[i](output)
 
         #return last layer - the final output
@@ -103,3 +103,28 @@ class MathDigitModel(tf.keras.Model):
         #train the model
         # should we include other params in train fx like number of epochs ?
         self.fit(x=training_inputs, y=training_classes, epochs=5)
+        self.fit_generator(training_iterator, validation_data=validation_iterator)
+
+    def train_generator(self, training_iterator, validation_iterator):
+        """
+        Fit the model to the generator training data using keras optimization
+        builtins.
+
+        For example, we may want to minimize cross-entropy as a performance
+        measure. This is built-in to keras (I'm almost positive).
+
+        Params
+        ------
+        training_iterator: DataIterator
+            training set lazily loaded to memory
+        validation_iterator: DataIterator
+            validation set lazily loaded to memory
+
+        Returns
+        -------
+        [N/A called for side-effects only]
+        """
+
+        self.compile(optimizer="adam", loss="sparse_categorical_crossentropy", metrics=["accuracy"])
+        self.fit_generator(training_iterator, validation_data=validation_iterator)
+
