@@ -67,8 +67,17 @@ def load_data(path, validation_split=0.1, **kwargs):
     }
     flow_kwargs.update(kwargs)
 
-    train_it = datagen.flow_from_directory(path, subset='training', **flow_kwargs)
-    validation_it = datagen.flow_from_directory(path, subset='validation',**flow_kwargs)
+    train_iter = datagen.flow_from_directory(
+        path, 
+        subset='training', 
+        **flow_kwargs
+    )
 
-    return train_it, validation_it
+    valid_iter = datagen.flow_from_directory(
+        path, 
+        subset='validation',
+        **flow_kwargs
+    )
+
+    return train_iter, valid_iter
 

@@ -126,5 +126,10 @@ class MathDigitModel(tf.keras.Model):
         """
 
         self.compile(optimizer="adam", loss="sparse_categorical_crossentropy", metrics=["accuracy"])
-        self.fit_generator(training_iterator, validation_data=validation_iterator)
+        self.fit_generator(
+            training_iterator, 
+            validation_data=validation_iterator,
+            steps_per_epoch=16,
+            validation_steps=8,
+        )
 
