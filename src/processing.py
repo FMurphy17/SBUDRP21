@@ -58,11 +58,11 @@ def load_data(path, validation_split=0.1, **kwargs):
     datagen = ImageDataGenerator(validation_split=validation_split)
 
     flow_kwargs = {
-        'class_mode': 'sparse',
+        'class_mode': 'categorical', #sparse
         'batch_size': 64,
         'seed': 42,
         'shuffle': True,
-        'target_size': (256, 256),
+        'target_size': (45, 45),
         'color_mode': 'grayscale',
     }
     flow_kwargs.update(kwargs)

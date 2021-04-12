@@ -6,11 +6,12 @@ image classification
 
 import tensorflow as tf
 import numpy as np
-import matplotlib.pyplot as plt
+#import matplotlib.pyplot as plt
+
 
 class MathDigitModel(tf.keras.Model):
 
-    def __init__(self, number_layers = 1, neurons_per_layer = 100):
+    def __init__(self, number_layers=2, neurons_per_layer=128, final_layer_units=10, input_shape=None):
 
         """
         Initialization of the MathDigitModel instances
@@ -32,10 +33,19 @@ class MathDigitModel(tf.keras.Model):
 
         # store layers in list so that we can add as many layers as we want
         self.dense = []
+
+        # these layers came from an example here:
+        # https://machinelearningmastery.com/how-to-normalize-center-and-standardize-images-with-the-imagedatagenerator-in-keras/
+        self.dense.append(tf.keras.layers.Conv2D(32, (3, 3), activation=tf.nn.relu, input_shape=input_shape))
+        self.dense.append(tf.keras.layers.MaxPooling2D((2, 2)))
+        self.dense.append(tf.keras.layers.Conv2D(64, (3, 3), activation=tf.nn.relu))
+        self.dense.append(tf.keras.layers.MaxPooling2D((2, 2)))
+
+
         self.dense.append(tf.keras.layers.Flatten())
         for i in range(self.n_layers):
             self.dense.append(tf.keras.layers.Dense(self.n_neurons, activation=tf.nn.relu))
-        self.dense.append(tf.keras.layers.Dense(self.n_neurons, activation=tf.nn.softmax))
+        self.dense.append(tf.keras.layers.Dense(final_layer_units, activation=tf.nn.softmax))
         # reserves half the data for training
         self.dropout = tf.keras.layers.Dropout(0.5)
 
@@ -64,18 +74,18 @@ class MathDigitModel(tf.keras.Model):
         inputs.shape == (1, 2025) TODO: figure out - image files are 45x45
         """
         #feeds input data through first layer
-        output = self.dense[0](inputs)
+        output = inputs
 
         #putting output of first layer into subsequent layer and so on
         if training:
             output = self.dropout(output, training=training)
-        for i in range(1, self.n_layers):
+        for i in range(len(self.dense)):
             output = self.dense[i](output)
 
         #return last layer - the final output
         return output
 
-    def train(self, training_inputs, training_classes):
+    def train(self, training_inputs, training_classes=None):
         """
         Fit the model to the training data using keras optimization builtins.
 
@@ -98,12 +108,14 @@ class MathDigitModel(tf.keras.Model):
         The ith training input corresponds to the ith training class
         """
         #compile the model
-        self.compile(optimizer="adam", loss="sparse_categorical_crossentropy", metrics=["accuracy"])
+        #self.compile(optimizer="adam", loss="sparse_categorical_crossentropy", metrics=["accuracy"])
+        self.compile(optimizer="adam", loss="categorical_crossentropy", metrics=["accuracy"])
 
         #train the model
-        # should we include other params in train fx like number of epochs ?
-        self.fit(x=training_inputs, y=training_classes, epochs=5)
-        self.fit_generator(training_iterator, validation_data=validation_iterator)
+        if training_classes is None:
+            self.fit(training_inputs, epochs=5)
+        else:
+            self.fit(x=training_inputs, y=training_classes, epochs=5)
 
     def train_generator(self, training_iterator, validation_iterator):
         """
