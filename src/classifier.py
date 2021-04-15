@@ -49,6 +49,23 @@ class MathDigitModel(tf.keras.Model):
         # reserves half the data for training
         self.dropout = tf.keras.layers.Dropout(0.5)
 
+        # saving and loading the model
+        self.checkpoint_filepath = 'checkpoints/'
+        self.save_checkpoint_callback = tf.keras.callbacks.ModelCheckpoint(
+            filepath=self.checkpoint_filepath,
+            save_weights_only=True,
+            verbose=1
+        )
+
+    def load_latest(self):
+        """
+        Load model from the latest checkpoint, obtained via a nice builtin 
+        tensorflow function
+        """
+        latest = tf.train.latest_checkpoint(self.checkpoint_filepath)
+
+        self.load_weights(latest)
+
     def call(self, inputs, training=False):
         """
         This method is used to actually perform "classification"; i.e., given
@@ -85,7 +102,7 @@ class MathDigitModel(tf.keras.Model):
         #return last layer - the final output
         return output
 
-    def train(self, training_inputs, training_classes=None):
+    def train(self, training_inputs, training_classes=None, checkpoint=False):
         """
         Fit the model to the training data using keras optimization builtins.
 
@@ -112,10 +129,12 @@ class MathDigitModel(tf.keras.Model):
         self.compile(optimizer="adam", loss="categorical_crossentropy", metrics=["accuracy"])
 
         #train the model
+        callbacks = [self.save_checkpoint_callback] if checkpoint else []
         if training_classes is None:
-            self.fit(training_inputs, epochs=5)
+            self.fit(training_inputs, epochs=5, callbacks=callbacks)
         else:
-            self.fit(x=training_inputs, y=training_classes, epochs=5)
+            self.fit(x=training_inputs, y=training_classes, epochs=5,
+                     callbacks=callbacks)
 
     def train_generator(self, training_iterator, validation_iterator):
         """
@@ -138,10 +157,13 @@ class MathDigitModel(tf.keras.Model):
         """
 
         self.compile(optimizer="adam", loss="sparse_categorical_crossentropy", metrics=["accuracy"])
+
+        callbacks = [self.save_checkpoint_callback] if checkpoint else []
         self.fit_generator(
             training_iterator, 
             validation_data=validation_iterator,
             steps_per_epoch=16,
             validation_steps=8,
+            callbacks=callbacks,
         )
 
