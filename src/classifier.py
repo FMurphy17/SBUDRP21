@@ -11,7 +11,9 @@ import numpy as np
 
 class MathDigitModel(tf.keras.Model):
 
-    def __init__(self, number_layers=2, neurons_per_layer=128, final_layer_units=10, input_shape=None):
+    def __init__(self, number_layers=2, neurons_per_layer=128,
+                 final_layer_units=10, input_shape=None,
+                 checkpoint_filepath='checkpoints/'):
 
         """
         Initialization of the MathDigitModel instances
@@ -50,7 +52,7 @@ class MathDigitModel(tf.keras.Model):
         self.dropout = tf.keras.layers.Dropout(0.5)
 
         # saving and loading the model
-        self.checkpoint_filepath = 'checkpoints/'
+        self.checkpoint_filepath = checkpoint_filepath
         self.save_checkpoint_callback = tf.keras.callbacks.ModelCheckpoint(
             filepath=self.checkpoint_filepath,
             save_weights_only=True,
