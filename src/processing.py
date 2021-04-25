@@ -2,10 +2,19 @@ import tensorflow as tf
 from tensorflow import keras
 from tensorflow.keras import layers
 from tensorflow.keras.preprocessing.image import ImageDataGenerator
+import numpy as np
 
 
 DATA_PATH = '../data/extracted_images/'
 
+
+def preprocessing_function(x):
+    """
+    our image preprocessing function inverts the image from 
+    black-on-white to white-on-black. this results in mostly
+    zeros in our training matrix instead of mostly 255's
+    """
+    return np.abs(x - 255.0)
 
 def load_data(path, validation_split=0.1, **kwargs):
     """
@@ -55,7 +64,9 @@ def load_data(path, validation_split=0.1, **kwargs):
     train_iter, valid_iter: (DirectoryIterator, DirectoryIterator)
         iterators for the training and validation datasets, respectively
     """
-    datagen = ImageDataGenerator(validation_split=validation_split)
+    datagen = ImageDataGenerator(validation_split=validation_split,
+                                 preprocessing_function=preprocessing_function
+                                 )
 
     flow_kwargs = {
         'class_mode': 'categorical', #sparse
