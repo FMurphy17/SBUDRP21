@@ -23,7 +23,7 @@ def identify_image(fn):
     maxpred = p1.max()
     predindex = int(p1.argmax(axis=-1))
     predlabel = labels[predindex]
-    return predlabel
+    return f"'{predlabel}' with probabilty: {maxpred:.3f}"
 
 class MyServer(BaseHTTPRequestHandler):
     def do_POST(self):
